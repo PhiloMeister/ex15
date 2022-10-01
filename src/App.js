@@ -16,9 +16,85 @@ function BookList({books}) {
 
     const toggleLikeOnly = () => {
         setLikedOnly(likedOnly => !likedOnly)
+        setUpdatedBooks([])
+        books.filter((book) => {
+            if (book.liked == true) {
+                setUpdatedBooks(updatedBooks => [...updatedBooks, book])
+            }
+            return book.liked == true ;
+        });
+        console.log(updatedBooks)
     }
 
-    //setLikedOnly(likedOnly => [...likedOnly,filteredBooks])
+    if (likedOnly == true){
+        return (
+            <React.Fragment>
+                <label>
+                    Liked only
+                    <input type="checkbox" onClick={toggleLikeOnly}/>
+                    {likedOnly.toString()}
+                </label>
+                <ul style={{listStyleType: "none", padding: 0}}>
+                    {/* The "map" function iterates over the array of books */}
+                    {/* and returns a list item with a Book component for   */}
+                    {/* each book in the books array.                       */}
+                    {/* The books now come from the state                   */}
+                    {updatedBooks.map((book) => (
+                        /*
+                        The key of the list item the ID of the book in the DB now
+                         */
+                        <li key={book.id}>
+                            {/* Display basic info about the Book */}
+                            <div>
+                                <p>
+                                    {/* Display a link leading to /book/..., to show  */}
+                                    {/* the book details of the book that was clicked */}
+                                    <Link to={`/book/${book.id}`} className="App-link"
+                                          style={{color: book.liked ? '#98ff98' : 'inherit'}}>
+                                        {book.title} by {book.author} ({book.year})
+                                    </Link>
+                                </p>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </React.Fragment>
+        )
+    }else {
+       return (
+           <React.Fragment>
+           <label>
+               Liked only
+               <input type="checkbox" onClick={toggleLikeOnly}/>
+               {likedOnly.toString()}
+           </label>
+           <ul style={{listStyleType: "none", padding: 0}}>
+               {/* The "map" function iterates over the array of books */}
+               {/* and returns a list item with a Book component for   */}
+               {/* each book in the books array.                       */}
+               {/* The books now come from the state                   */}
+               {books.map((book) => (
+                   /*
+                   The key of the list item the ID of the book in the DB now
+                    */
+                   <li key={book.id}>
+                       {/* Display basic info about the Book */}
+                       <div>
+                           <p>
+                               {/* Display a link leading to /book/..., to show  */}
+                               {/* the book details of the book that was clicked */}
+                               <Link to={`/book/${book.id}`} className="App-link"
+                                     style={{color: book.liked ? '#98ff98' : 'inherit'}}>
+                                   {book.title} by {book.author} ({book.year})
+                               </Link>
+                           </p>
+                       </div>
+                   </li>
+               ))}
+           </ul>
+       </React.Fragment>)
+    }
+
     return (
         /* Render a list of Book components, with no bullet points */
         <React.Fragment>
@@ -54,6 +130,7 @@ function BookList({books}) {
         </React.Fragment>
 
     );
+
 }
 
 /* Book Form component - the UI & logic to add a new book */
